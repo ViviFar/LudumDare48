@@ -34,6 +34,11 @@ public class EnemyBehaviour : MonoBehaviour
     {
         armor = 0;
         GetArmor(5);
+        StateMachine.Instance.Plyr.TakeDamage(10);
+        if (StateMachine.Instance.CurrentState != States.EnemyTurn)
+        {
+            return;
+        }
         StateMachine.Instance.CurrentState = States.PlayerTurn;
     }
 
@@ -43,6 +48,7 @@ public class EnemyBehaviour : MonoBehaviour
         if (lives <= 0)
         {
             StateMachine.Instance.CurrentState = States.WinLevel;
+            SoundManager.Instance.EnemySource = null;
             Destroy(this.gameObject);
         }
     }

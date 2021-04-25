@@ -33,10 +33,10 @@ RectTransform:
   m_Father: {fileID: 5481555334754599694}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.12555225, y: 0.07038664}
-  m_AnchorMax: {x: 0.20350748, y: 0.23422673}
-  m_AnchoredPosition: {x: -17, y: 172}
-  m_SizeDelta: {x: -1.6000004, y: 3.9500008}
+  m_AnchorMin: {x: 0.40214443, y: 0.07038664}
+  m_AnchorMax: {x: 0.48136103, y: 0.28840506}
+  m_AnchoredPosition: {x: -0.5, y: 1}
+  m_SizeDelta: {x: -2.600006, y: -16.05}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5481555334746634064
 CanvasRenderer:
@@ -115,7 +115,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5481555334754599681}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -162,7 +162,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -217.5173, y: 38.938705}
+  m_Offset: {x: -40.293106, y: -117.78805}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -173,7 +173,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 47.387756, y: 67.77701}
+  m_Size: {x: 52.784637, y: 66.93202}
   m_EdgeRadius: 0
 --- !u!114 &5481555334754599695
 MonoBehaviour:
