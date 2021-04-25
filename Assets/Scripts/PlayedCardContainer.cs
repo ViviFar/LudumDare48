@@ -18,6 +18,18 @@ public class PlayedCardContainer : MonoBehaviour
     }
     private Transform placement;
 
+    private BoxCollider2D col;
+
+    private void Start()
+    {
+        col = GetComponent<BoxCollider2D>();
+    }
+
+    public void ChangeColliderStatus(bool enabled)
+    {
+        col.enabled = enabled;
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Card")

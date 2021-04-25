@@ -9,6 +9,8 @@ public class Player : MonoBehaviour
     public int MaxLife { get { return maxLife; } }
     private int currentLife;
 
+    private int armor = 0;
+
     //[SerializeField]
     //private List<Card> hand;
 
@@ -29,15 +31,21 @@ public class Player : MonoBehaviour
     public void ResetPlayer()
     {
         currentLife = maxLife;
+        armor = 0;
     }
 
     public void TakeDamage(int dam)
     {
-        currentLife -= dam;
+        currentLife -= (dam-armor);
         if (currentLife <= 0)
         {
             StateMachine.Instance.CurrentState = States.Lose;
             Destroy(this.gameObject);
         }
+    }
+
+    public void AddArmor(int arm)
+    {
+        armor += arm;
     }
 }

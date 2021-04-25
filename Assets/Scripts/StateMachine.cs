@@ -26,7 +26,8 @@ public class StateMachine : GenericSingleton<StateMachine>
     private States previousState;
 
     [SerializeField]
-    List<PlayedCardContainer> cardContainers;
+    private List<PlayedCardContainer> cardContainers;
+    public List<PlayedCardContainer> CardContainers { get { return cardContainers; } }
 
     [SerializeField]
     private GameObject MenuContainer;
@@ -38,12 +39,17 @@ public class StateMachine : GenericSingleton<StateMachine>
     [SerializeField]
     private GameObject EnemyPrefab;
     private EnemyBehaviour currentEnemy;
+    public EnemyBehaviour CurrentEnemy { get { return currentEnemy; } }
 
     [SerializeField]
     private GameObject PlayerPrefab;
-    private Player player;
+    private Player plyr;
+    public Player Plyr { get { return plyr; } }
 
     int currentLevel = 1;
+
+    [SerializeField]
+    private ApplyPlayedCardsEffect playedCardsManager;
 
     protected override void Awake()
     {
@@ -62,6 +68,10 @@ public class StateMachine : GenericSingleton<StateMachine>
     {
         if (currentState != previousState)
         {
+            if(previousState == States.PlayerTurn)
+            {
+                playedCardsManager.PlayTurn();
+            }
             previousState = currentState;
             switch (currentState)
             {
@@ -94,7 +104,7 @@ public class StateMachine : GenericSingleton<StateMachine>
 #if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.L))
         {
-            player.TakeDamage(10000000);
+            plyr.TakeDamage(10000000);
         }
         if (Input.GetKeyDown(KeyCode.W))
         {
@@ -155,20 +165,22 @@ public class StateMachine : GenericSingleton<StateMachine>
         currentState = States.EnemyTurn;
     }
 
-    public bool DropCardOnContainer(DragDropCard target)
+    public int DropCardOnContainer(DragDropCard target)
     {
-        foreach(PlayedCardContainer cont in cardContainers)
+        for(int i=0; i< cardContainers.Count; i++)
         {
+            PlayedCardContainer cont = cardContainers[i];
             if (cont.HasCardOver)
             {
                 target.transform.SetParent(cont.transform);
                 target.TargetPos = cont.EmptyImage.transform.position;
-                return true;
+                cont.ChangeColliderStatus(false);
+                return i;
             }
         }
-        return false;
+        return -1;
     }
-
+    
 
     private void createEnemy()
     {
@@ -179,7 +191,7 @@ public class StateMachine : GenericSingleton<StateMachine>
     private void createPlayer()
     {
         GameObject go = Instantiate(PlayerPrefab, GameContainer.transform);
-        player = go.GetComponent<Player>();
+        plyr = go.GetComponent<Player>();
     }
 
     private IEnumerator WinLevel()
