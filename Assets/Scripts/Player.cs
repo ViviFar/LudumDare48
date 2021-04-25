@@ -5,7 +5,9 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField]
-    private int life = 10;
+    private int maxLife = 10;
+    public int MaxLife { get { return maxLife; } }
+    private int currentLife;
 
     //[SerializeField]
     //private List<Card> hand;
@@ -15,12 +17,27 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        ResetPlayer();
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void ResetPlayer()
+    {
+        currentLife = maxLife;
+    }
+
+    public void TakeDamage(int dam)
+    {
+        currentLife -= dam;
+        if (currentLife <= 0)
+        {
+            StateMachine.Instance.CurrentState = States.Lose;
+            Destroy(this.gameObject);
+        }
     }
 }

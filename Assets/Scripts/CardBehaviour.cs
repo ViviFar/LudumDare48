@@ -20,7 +20,4 @@ public class CardBehaviour : MonoBehaviour
     [SerializeField]
     private bool affectCardOnRight;
     public bool AffectCardOnRight { get { return affectCardOnRight; } }
-
-
-
 }

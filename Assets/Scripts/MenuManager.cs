@@ -19,6 +19,6 @@ public class MenuManager : MonoBehaviour
 
     public void PlayButtonClick()
     {
-        StateMachine.Instance.CurrentState = States.PlayerTurn;
+        StateMachine.Instance.CurrentState = States.StartGame;
     }
 }
