@@ -40,6 +40,7 @@ public class Player : MonoBehaviour
         if (currentLife <= 0)
         {
             StateMachine.Instance.CurrentState = States.Lose;
+            SoundManager.Instance.PlayerSource = null;
             Destroy(this.gameObject);
         }
     }

@@ -190,11 +190,13 @@ public class StateMachine : GenericSingleton<StateMachine>
         GameObject go = Instantiate(EnemyPrefab, GameContainer.transform);
         currentEnemy = go.GetComponent<EnemyBehaviour>();
         currentEnemy.MaxLives = 10 * currentLevel;
+        SoundManager.Instance.EnemySource = currentEnemy.GetComponent<AudioSource>();
     }
     private void createPlayer()
     {
         GameObject go = Instantiate(PlayerPrefab, GameContainer.transform);
         plyr = go.GetComponent<Player>();
+        SoundManager.Instance.PlayerSource = plyr.GetComponent<AudioSource>();
     }
 
     private IEnumerator WinLevel()

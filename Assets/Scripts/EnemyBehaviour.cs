@@ -48,6 +48,7 @@ public class EnemyBehaviour : MonoBehaviour
         if (lives <= 0)
         {
             StateMachine.Instance.CurrentState = States.WinLevel;
+            SoundManager.Instance.EnemySource = null;
             Destroy(this.gameObject);
         }
     }
