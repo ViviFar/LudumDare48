@@ -16,6 +16,8 @@ public class PlayedCardContainer : MonoBehaviour
     {
         get { return emptyImage; }
     }
+
+    private Image imageTest;
     private Transform placement;
 
     private BoxCollider2D col;
@@ -23,6 +25,7 @@ public class PlayedCardContainer : MonoBehaviour
     private void Start()
     {
         col = GetComponent<BoxCollider2D>();
+        imageTest = GetComponent<Image>();
     }
 
     public void ChangeColliderStatus(bool enabled)

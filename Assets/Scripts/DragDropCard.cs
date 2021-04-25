@@ -40,7 +40,7 @@ public class DragDropCard : MonoBehaviour
 
     public void StartDrag()
     {
-            selected = true;
+        selected = true;
         if (onContainer != -1)
         {
             StateMachine.Instance.CardContainers[onContainer].ChangeColliderStatus(true);
@@ -56,13 +56,24 @@ public class DragDropCard : MonoBehaviour
             int i = StateMachine.Instance.DropCardOnContainer(this);
             if (i == -1)
             {
-                transform.SetParent(initParent, false);
-                targetPos = initPos;
+                ResetCardPlacement();
             }
             else
             {
                 onContainer = i;
+                transform.position = targetPos;
             }
+        }
+    }
+
+    public void ResetCardPlacement()
+    {
+        transform.SetParent(initParent, false);
+        targetPos = initPos;
+        if (onContainer != -1)
+        {
+            StateMachine.Instance.CardContainers[onContainer].ChangeColliderStatus(true);
+            onContainer = -1;
         }
         transform.position = targetPos;
     }

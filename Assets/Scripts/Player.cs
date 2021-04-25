@@ -31,12 +31,12 @@ public class Player : MonoBehaviour
     public void ResetPlayer()
     {
         currentLife = maxLife;
-        armor = 0;
+        ResetArmor();
     }
-
+    public void ResetArmor() { armor = 0; }
     public void TakeDamage(int dam)
     {
-        currentLife -= (dam-armor);
+        currentLife -= Mathf.Max((dam-armor), 0);
         if (currentLife <= 0)
         {
             StateMachine.Instance.CurrentState = States.Lose;

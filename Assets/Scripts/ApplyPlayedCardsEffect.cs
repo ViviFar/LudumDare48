@@ -7,6 +7,10 @@ public class ApplyPlayedCardsEffect : MonoBehaviour
 {
     private List<PlayedCardContainer> containers;
 
+    [SerializeField]
+    private List<CardBehaviour> allCards;
+    private int nbPlayedCards = 0;
+
     //private List<CardBehaviour> cardsPlayed;
     CardBehaviour[] cardsPlayed;
     bool[] extended;
@@ -41,6 +45,35 @@ public class ApplyPlayedCardsEffect : MonoBehaviour
     {
         GetCardsPlayed();
         CalculateEffect();
+        if (nbPlayedCards >= allCards.Count)
+        {
+            ResetCards();
+        }
+        else
+        {
+            PutCardsInDiscard();
+        }
+    }
+
+    private void PutCardsInDiscard()
+    {
+        for (int i = 0; i < cardsPlayed.Length; i++)
+        {
+            if (cardsPlayed[i] != null)
+            {
+                cardsPlayed[i].GetComponent<DragDropCard>().ResetCardPlacement();
+                cardsPlayed[i].gameObject.SetActive(false);
+            }
+        }
+    }
+
+    private void ResetCards()
+    {
+        foreach(CardBehaviour c in allCards)
+        {
+            c.gameObject.SetActive(true);
+            c.GetComponent<DragDropCard>().ResetCardPlacement();
+        }
     }
 
     private void GetCardsPlayed()
@@ -50,6 +83,10 @@ public class ApplyPlayedCardsEffect : MonoBehaviour
         {
             CardBehaviour cb = containers[i].GetComponentInChildren<CardBehaviour>();
             cardsPlayed[i] = cb;
+            if (cb != null)
+            {
+                nbPlayedCards++;
+            }
         }
     }
 

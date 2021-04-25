@@ -113,6 +113,7 @@ public class StateMachine : GenericSingleton<StateMachine>
 #endif
     }
 
+    #region changingState
     private void onMenuStateEnter()
     {
         MenuContainer.SetActive(true);
@@ -134,7 +135,7 @@ public class StateMachine : GenericSingleton<StateMachine>
 
     private void onPlayerTurnStateEnter()
     {
-
+        plyr.ResetArmor();
     }
 
     private void onEnemyTurnStateEnter()
@@ -160,6 +161,8 @@ public class StateMachine : GenericSingleton<StateMachine>
 
     }
 
+    #endregion
+
     public void NextTurnButtonPressed()
     {
         currentState = States.EnemyTurn;
@@ -172,7 +175,7 @@ public class StateMachine : GenericSingleton<StateMachine>
             PlayedCardContainer cont = cardContainers[i];
             if (cont.HasCardOver)
             {
-                target.transform.SetParent(cont.transform);
+                target.transform.SetParent(cont.transform, false);
                 target.TargetPos = cont.EmptyImage.transform.position;
                 cont.ChangeColliderStatus(false);
                 return i;
