@@ -5,10 +5,16 @@ using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject MainMenuPanel;
+
+    [SerializeField]
+    private GameObject CreditPanel;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        ActivateMenu();   
     }
 
     // Update is called once per frame
@@ -17,8 +23,25 @@ public class MenuManager : MonoBehaviour
         
     }
 
+    public void ActivateMenu()
+    {
+        MainMenuPanel.SetActive(true);
+        CreditPanel.SetActive(false);
+    }
+
+    public void ActivateCredit()
+    {
+        MainMenuPanel.SetActive(false);
+        CreditPanel.SetActive(true);
+    }
+
+    public void QuitButtonClick()
+    {
+        Application.Quit();
+    }
+
     public void PlayButtonClick()
     {
-        StateMachine.Instance.CurrentState = States.PlayerTurn;
+        StateMachine.Instance.CurrentState = States.StartGame;
     }
 }
