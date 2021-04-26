@@ -247,6 +247,8 @@ public class StateMachine : GenericSingleton<StateMachine>
 
     public void BackToMenu()
     {
+        Destroy(plyr.gameObject);
+        Destroy(currentEnemy.gameObject);
         currentState = States.Menu;
     }
 
@@ -386,6 +388,9 @@ public class StateMachine : GenericSingleton<StateMachine>
     public void continueAfterWin()
     {
         currentLevel++;
+        playedCardsManager.HideCardFirstLevel();
+        playedCardsManager.ResetCards();
+        playedCardsManager.NbPlayedCards = 0;
         currentEnemy.MaxLives += 10 * currentLevel;
         currentEnemy.ResetEnemy();
         currentState = States.PlayerTurn;

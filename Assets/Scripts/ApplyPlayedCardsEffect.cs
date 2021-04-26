@@ -153,11 +153,19 @@ public class ApplyPlayedCardsEffect : MonoBehaviour
                     if (cb.AffectCardOnRight && i < cardsPlayed.Length - 1)
                     {
                         cb = cardsPlayed[i + 1];
+                        if (cb == null)
+                        {
+                            continue;
+                        }
                         multiply[i] *= multiply[i + 1];
                     }
                     if(!cb.AffectCardOnRight && i > 0)
                     {
                         cb = cardsPlayed[i - 1];
+                        if (cb == null)
+                        {
+                            continue;
+                        }
                         multiply[i] *= multiply[i - 1];
                     }
                 }
