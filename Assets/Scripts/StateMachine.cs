@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum States
 {
@@ -35,6 +36,8 @@ public class StateMachine : GenericSingleton<StateMachine>
     private GameObject GameContainer;
     [SerializeField]
     private GameObject GameOverContainer;
+    [SerializeField]
+    private GameObject PauseContainer;
 
     [SerializeField]
     private GameObject EnemyPrefab;
@@ -50,6 +53,12 @@ public class StateMachine : GenericSingleton<StateMachine>
 
     [SerializeField]
     private ApplyPlayedCardsEffect playedCardsManager;
+    [SerializeField]
+    private Button endTurnButton;
+
+    private Animator enemyAnim;
+
+    private bool paused = false;
 
     protected override void Awake()
     {
@@ -70,6 +79,7 @@ public class StateMachine : GenericSingleton<StateMachine>
         {
             if(previousState == States.PlayerTurn)
             {
+                endTurnButton.interactable = false;
                 playedCardsManager.PlayTurn();
             }
             previousState = currentState;
@@ -100,13 +110,31 @@ public class StateMachine : GenericSingleton<StateMachine>
                     break;
             }
         }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (currentState == States.PlayerTurn || currentState == States.EnemyTurn)
+            {
+                if (paused)
+                {
+                    Resume();
+                }
+                else
+                {
+                    paused = true;
+                    MenuContainer.SetActive(false);
+                    GameContainer.SetActive(false);
+                    GameOverContainer.SetActive(false);
+                    PauseContainer.SetActive(true);
+                }
+            }
+        }
 
 #if UNITY_EDITOR
-        if (Input.GetKeyDown(KeyCode.L))
+        if (Input.GetKeyDown(KeyCode.L) && plyr != null)
         {
             plyr.TakeDamage(10000000);
         }
-        if (Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.W) && plyr != null)
         {
             currentEnemy.takeDamage(100000000);
         }
@@ -119,23 +147,27 @@ public class StateMachine : GenericSingleton<StateMachine>
         MenuContainer.SetActive(true);
         GameContainer.SetActive(false);
         GameOverContainer.SetActive(false);
+        PauseContainer.SetActive(false);
     }
 
     private void onStartGameStateEnter()
     {
+        paused = false;
         MenuContainer.SetActive(false);
         GameContainer.SetActive(true);
         GameOverContainer.SetActive(false);
+        PauseContainer.SetActive(false);
         currentLevel = 1;
         createEnemy();
         createPlayer();
         currentState = States.PlayerTurn;
-
     }
 
     private void onPlayerTurnStateEnter()
     {
-        plyr.ResetArmor();
+        endTurnButton.interactable = true;
+        if(plyr != null)
+            plyr.ResetArmor();
     }
 
     private void onEnemyTurnStateEnter()
@@ -153,6 +185,7 @@ public class StateMachine : GenericSingleton<StateMachine>
         MenuContainer.SetActive(false);
         GameContainer.SetActive(false);
         GameOverContainer.SetActive(true);
+        PauseContainer.SetActive(false);
         StartCoroutine(LoseGame());
     }
 
@@ -166,6 +199,25 @@ public class StateMachine : GenericSingleton<StateMachine>
     public void NextTurnButtonPressed()
     {
         currentState = States.EnemyTurn;
+    }
+
+    public void Resume()
+    {
+        paused = false;
+        MenuContainer.SetActive(false);
+        GameContainer.SetActive(true);
+        GameOverContainer.SetActive(false);
+        PauseContainer.SetActive(false);
+    }
+
+    public void BackToMenu()
+    {
+        currentState = States.Menu;
+    }
+
+    public void Exit()
+    {
+        Application.Quit();
     }
 
     public int DropCardOnContainer(DragDropCard target)
@@ -191,6 +243,7 @@ public class StateMachine : GenericSingleton<StateMachine>
         currentEnemy = go.GetComponent<EnemyBehaviour>();
         currentEnemy.MaxLives = 10 * currentLevel;
         SoundManager.Instance.EnemySource = currentEnemy.GetComponent<AudioSource>();
+        enemyAnim = currentEnemy.GetComponent<Animator>();
     }
     private void createPlayer()
     {
@@ -201,10 +254,13 @@ public class StateMachine : GenericSingleton<StateMachine>
 
     private IEnumerator WinLevel()
     {
+        enemyAnim.SetBool("Died", true);
         //TODO: lancer animation fin level
         yield return new WaitForSeconds(5);
+        enemyAnim.SetBool("Died", false);
         currentLevel++;
-        createEnemy();
+        currentEnemy.MaxLives = 10 * currentLevel;
+        currentEnemy.ResetEnemy();
         currentState = States.PlayerTurn;
     }
 
@@ -215,4 +271,9 @@ public class StateMachine : GenericSingleton<StateMachine>
         currentState = States.Menu;
     }
 
+    public void DestroyPlayer()
+    {
+        plyr = null;
+    }
+    
 }

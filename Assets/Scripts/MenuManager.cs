@@ -35,11 +35,6 @@ public class MenuManager : MonoBehaviour
         CreditPanel.SetActive(true);
     }
 
-    public void QuitButtonClick()
-    {
-        Application.Quit();
-    }
-
     public void PlayButtonClick()
     {
         StateMachine.Instance.CurrentState = States.StartGame;

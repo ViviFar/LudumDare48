@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int maxLife = 10;
     public int MaxLife { get { return maxLife; } }
+    [SerializeField]
     private int currentLife;
 
     private int armor = 0;
@@ -41,6 +42,7 @@ public class Player : MonoBehaviour
         {
             StateMachine.Instance.CurrentState = States.Lose;
             SoundManager.Instance.PlayerSource = null;
+            StateMachine.Instance.DestroyPlayer();
             Destroy(this.gameObject);
         }
     }
