@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ApplyPlayedCardsEffect : MonoBehaviour
 {
@@ -10,33 +11,55 @@ public class ApplyPlayedCardsEffect : MonoBehaviour
     [SerializeField]
     private List<CardBehaviour> allCards;
     private int nbPlayedCards = 0;
+    public int NbPlayedCards
+    {
+        get { return nbPlayedCards; }
+        set { nbPlayedCards = value; }
+    }
 
     //private List<CardBehaviour> cardsPlayed;
     CardBehaviour[] cardsPlayed;
     bool[] extended;
     int[] multiply;
-    CardEffect[] copy;
     int[] damage;
 
     private void Start()
     {
         containers = StateMachine.Instance.CardContainers;
-        initializeTurn();
+        InitializeTurn();
     }
 
-    private void initializeTurn()
+    public void HideCardFirstLevel()
+    {
+
+        if (StateMachine.Instance.CurrentLevel == 1)
+        {
+            for (int i = 4; i < allCards.Count; i++)
+            {
+                allCards[i].GetComponent<Image>().enabled = false;
+                allCards[i].GetComponent<BoxCollider2D>().enabled = false;
+            }
+        }
+        else
+        {
+            for (int i = 0; i < allCards.Count; i++)
+            {
+                allCards[i].GetComponent<Image>().enabled = true;
+                allCards[i].GetComponent<BoxCollider2D>().enabled = true;
+            }
+        }
+    }
+
+    public void InitializeTurn()
     {
         cardsPlayed = new CardBehaviour[5];
         extended = new bool[5];
         multiply = new int[5];
-        copy = new CardEffect[5];
         damage = new int[5];
         for (int i = 0; i < cardsPlayed.Length; i++)
         {
             extended[i] = false;
             multiply[i] = 1;
-            //we put Copy in it: with that done, when applying the effects, we will only check those differents from copy
-            copy[i] = CardEffect.Copy;
             damage[i] = 0;
         }
     }
@@ -45,40 +68,68 @@ public class ApplyPlayedCardsEffect : MonoBehaviour
     {
         GetCardsPlayed();
         CalculateEffect();
-        if (nbPlayedCards >= allCards.Count)
+        if (StateMachine.Instance.CurrentLevel == 1)
         {
-            ResetCards();
+            if (nbPlayedCards <4)
+            {
+                PutCardsInDiscard();
+            }
+            else
+            {
+                nbPlayedCards = 0;
+                ResetCards();
+            }
         }
         else
         {
-            PutCardsInDiscard();
+            if (nbPlayedCards >= allCards.Count)
+            {
+                nbPlayedCards = 0;
+                ResetCards();
+            }
+            else
+            {
+                PutCardsInDiscard();
+            }
         }
     }
 
     private void PutCardsInDiscard()
     {
-        for (int i = 0; i < cardsPlayed.Length; i++)
-        {
-            if (cardsPlayed[i] != null)
+
+            for (int i = 0; i < cardsPlayed.Length; i++)
             {
-                cardsPlayed[i].GetComponent<DragDropCard>().ResetCardPlacement();
-                cardsPlayed[i].gameObject.SetActive(false);
+                if (cardsPlayed[i] != null)
+                {
+                    cardsPlayed[i].GetComponent<DragDropCard>().ResetCardPlacement();
+                    cardsPlayed[i].gameObject.SetActive(false);
+                }
             }
-        }
     }
 
-    private void ResetCards()
+    public void ResetCards()
     {
-        foreach(CardBehaviour c in allCards)
+        if (StateMachine.Instance.CurrentLevel == 1)
         {
-            c.gameObject.SetActive(true);
-            c.GetComponent<DragDropCard>().ResetCardPlacement();
+            for (int i = 0; i < 4; i++)
+            {
+                allCards[i].gameObject.SetActive(true);
+                allCards[i].GetComponent<DragDropCard>().ResetCardPlacement();
+            }
+        }
+        else
+        {
+            foreach (CardBehaviour c in allCards)
+            {
+                c.gameObject.SetActive(true);
+                c.GetComponent<DragDropCard>().ResetCardPlacement();
+            }
         }
     }
 
     private void GetCardsPlayed()
     {
-        initializeTurn();
+        InitializeTurn();
         for (int i = 0; i < cardsPlayed.Length; i++)
         {
             CardBehaviour cb = containers[i].GetComponentInChildren<CardBehaviour>();
@@ -140,6 +191,7 @@ public class ApplyPlayedCardsEffect : MonoBehaviour
                     case CardEffect.Damage:
                         Debug.Log("attacking for " + multiply[i] * cb.EffectStrength + " damage");
                         StateMachine.Instance.CurrentEnemy.takeDamage(multiply[i] * cb.EffectStrength);
+                        SoundManager.Instance.PlayPlayerAttackSound();
                         break;
                 }
             }

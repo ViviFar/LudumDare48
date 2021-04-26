@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 public enum States
 {
@@ -9,7 +10,6 @@ public enum States
     StartGame,
     PlayerTurn,
     EnemyTurn,
-    Pause,
     WinLevel,
     Lose
 }
@@ -38,6 +38,14 @@ public class StateMachine : GenericSingleton<StateMachine>
     private GameObject GameOverContainer;
     [SerializeField]
     private GameObject PauseContainer;
+    [SerializeField]
+    private VideoPlayer vp;
+    [SerializeField]
+    private GameObject winContinueQuestionContainer;
+    [SerializeField]
+    private GameObject textFrstLvl;
+    [SerializeField]
+    private GameObject textScndLvl;
 
     [SerializeField]
     private GameObject EnemyPrefab;
@@ -50,6 +58,7 @@ public class StateMachine : GenericSingleton<StateMachine>
     public Player Plyr { get { return plyr; } }
 
     int currentLevel = 1;
+    public int CurrentLevel { get { return currentLevel; } }
 
     [SerializeField]
     private ApplyPlayedCardsEffect playedCardsManager;
@@ -103,9 +112,6 @@ public class StateMachine : GenericSingleton<StateMachine>
                 case States.Lose:
                     onLoseStateEnter();
                     break;
-                case States.Pause:
-                    onPauseStateEnter();
-                    break;
                 default:
                     break;
             }
@@ -136,7 +142,7 @@ public class StateMachine : GenericSingleton<StateMachine>
         }
         if (Input.GetKeyDown(KeyCode.W) && plyr != null)
         {
-            currentEnemy.takeDamage(10);
+            currentEnemy.takeDamage(100000);
         }
 #endif
     }
@@ -148,6 +154,10 @@ public class StateMachine : GenericSingleton<StateMachine>
         GameContainer.SetActive(false);
         GameOverContainer.SetActive(false);
         PauseContainer.SetActive(false);
+        vp.gameObject.SetActive(false);
+        winContinueQuestionContainer.SetActive(false);
+        textFrstLvl.SetActive(false);
+        textScndLvl.SetActive(false);
     }
 
     private void onStartGameStateEnter()
@@ -157,9 +167,14 @@ public class StateMachine : GenericSingleton<StateMachine>
         GameContainer.SetActive(true);
         GameOverContainer.SetActive(false);
         PauseContainer.SetActive(false);
+        vp.gameObject.SetActive(false);
+        winContinueQuestionContainer.SetActive(false);
+        textFrstLvl.SetActive(false);
+        textScndLvl.SetActive(false);
         currentLevel = 1;
-        createEnemy();
+        createFirstLevel();
         createPlayer();
+        playedCardsManager.HideCardFirstLevel();
         currentState = States.PlayerTurn;
         BlurManager.Instance.Blur();
     }
@@ -187,19 +202,21 @@ public class StateMachine : GenericSingleton<StateMachine>
         GameContainer.SetActive(false);
         GameOverContainer.SetActive(true);
         PauseContainer.SetActive(false);
+        vp.gameObject.SetActive(false);
+        winContinueQuestionContainer.SetActive(false);
+        textFrstLvl.SetActive(false);
+        textScndLvl.SetActive(false);
         StartCoroutine(LoseGame());
     }
-
-    private void onPauseStateEnter()
-    {
-
-    }
+   
 
     #endregion
 
     public void NextTurnButtonPressed()
     {
         currentState = States.EnemyTurn;
+        textFrstLvl.SetActive(false);
+        textScndLvl.SetActive(false);
     }
 
     public void Resume()
@@ -209,6 +226,23 @@ public class StateMachine : GenericSingleton<StateMachine>
         GameContainer.SetActive(true);
         GameOverContainer.SetActive(false);
         PauseContainer.SetActive(false);
+        vp.gameObject.SetActive(false);
+        winContinueQuestionContainer.SetActive(false);
+        if (currentLevel == 1)
+        {
+            textFrstLvl.SetActive(true);
+            textScndLvl.SetActive(false);
+        }
+        else if(currentLevel == 2)
+        {
+            textFrstLvl.SetActive(false);
+            textScndLvl.SetActive(true);
+        }
+        else
+        {
+            textFrstLvl.SetActive(false);
+            textScndLvl.SetActive(false);
+        }
     }
 
     public void BackToMenu()
@@ -256,19 +290,72 @@ public class StateMachine : GenericSingleton<StateMachine>
 
     private IEnumerator WinLevel()
     {
-        enemyAnim.SetBool("Died", true);
-        //TODO: lancer animation fin level
-        yield return new WaitForSeconds(5);
-        enemyAnim.SetBool("Died", false);
-        currentLevel++;
-        currentEnemy.MaxLives = 10 * currentLevel;
-        currentEnemy.ResetEnemy();
-        currentState = States.PlayerTurn;
+        if (currentLevel != 5)
+        {
+            enemyAnim.SetBool("Died", true);
+            //TODO: lancer animation fin level
+            yield return new WaitForSeconds(3);
+            enemyAnim.SetBool("Died", false);
+            yield return new WaitForSeconds(1);
+            currentLevel++;
+            playedCardsManager.HideCardFirstLevel();
+            playedCardsManager.ResetCards();
+            playedCardsManager.NbPlayedCards = 0;
+            switch (currentLevel)
+            {
+                case 2:
+                    cardContainers[1].gameObject.SetActive(true);
+                    cardContainers[2].gameObject.SetActive(true);
+                    currentEnemy.Attack = 7;
+                    currentEnemy.MaxLives = 19;
+                    textScndLvl.SetActive(true);
+                    break;
+                case 3:
+                    cardContainers[3].gameObject.SetActive(true);
+                    cardContainers[4].gameObject.SetActive(true);
+                    currentEnemy.MaxLives = 173;
+                    currentEnemy.Attack = 8;
+                    currentEnemy.BlockAmount = 20;
+                    currentEnemy.AttackAndBlockAmount = 5;
+                    break;
+                case 4:
+                    currentEnemy.MaxLives = 346;
+                    currentEnemy.Attack = 12;
+                    currentEnemy.BlockAmount = 30;
+                    currentEnemy.AttackAndBlockAmount = 8;
+                    break;
+                case 5:
+                    currentEnemy.MaxLives = 519;
+                    currentEnemy.Attack = 20;
+                    currentEnemy.BlockAmount = 50;
+                    currentEnemy.AttackAndBlockAmount =10;
+                    break;
+                default:
+                    currentEnemy.MaxLives +=70;
+                    currentEnemy.Attack = 20;
+                    currentEnemy.BlockAmount = 50;
+                    currentEnemy.AttackAndBlockAmount = 10;
+                    break;
+            }
+            currentEnemy.ResetEnemy();
+            currentState = States.PlayerTurn;
+        }
+        else
+        {
+            PauseContainer.SetActive(false);
+            vp.gameObject.SetActive(true);
+            winContinueQuestionContainer.SetActive(false);
+            vp.isLooping = false;
+            vp.Play();
+            yield return new WaitForSeconds((float)vp.clip.length);
+            vp.gameObject.SetActive(false);
+            winContinueQuestionContainer.SetActive(true);
+        }
     }
 
     private IEnumerator LoseGame()
     {
-
+        DestroyEnemy();
         yield return new WaitForSeconds(5);
         currentState = States.Menu;
     }
@@ -277,5 +364,54 @@ public class StateMachine : GenericSingleton<StateMachine>
     {
         plyr = null;
     }
+
+    public void DestroyEnemy()
+    {
+        Destroy(currentEnemy.gameObject);
+        currentEnemy = null;
+    }
     
+    private void createFirstLevel()
+    {
+        createEnemy();
+        currentEnemy.MaxLives = 3;
+        currentEnemy.Attack = 2;
+        for(int i=1; i<cardContainers.Count; i++)
+        {
+            cardContainers[i].gameObject.SetActive(false);
+        }
+        textFrstLvl.SetActive(true);
+    }
+
+    public void continueAfterWin()
+    {
+        currentLevel++;
+        currentEnemy.MaxLives += 10 * currentLevel;
+        currentEnemy.ResetEnemy();
+        currentState = States.PlayerTurn;
+        Resume();
+    }
+
+
+    public void deactivateContainers()
+    {
+        foreach(PlayedCardContainer ct in cardContainers)
+        {
+            if (ct.gameObject.activeInHierarchy)
+            {
+                ct.GetComponent<BoxCollider2D>().enabled = false;
+            }
+        }
+    }
+
+    public void reactivateContainers()
+    {
+        foreach (PlayedCardContainer ct in cardContainers)
+        {
+            if (ct.gameObject.activeInHierarchy)
+            {
+                ct.GetComponent<BoxCollider2D>().enabled = true;
+            }
+        }
+    }
 }

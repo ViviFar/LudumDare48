@@ -13,6 +13,7 @@ public class DragDropCard : MonoBehaviour
         get { return overDropZone; }
         set { overDropZone = value; }
     }
+    [SerializeField]
     private Transform initParent;
     private Vector2 initPos;
     private Vector2 targetPos;
@@ -26,7 +27,7 @@ public class DragDropCard : MonoBehaviour
 
     private void Start()
     {
-        initParent = transform.parent;
+        //initParent = transform.parent;
         initPos = transform.position;
         targetPos = initPos;
     }
@@ -64,6 +65,10 @@ public class DragDropCard : MonoBehaviour
                 onContainer = i;
                 transform.position = targetPos;
             }
+        }
+        else
+        {
+            ResetCardPlacement();
         }
     }
 

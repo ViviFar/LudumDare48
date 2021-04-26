@@ -27,6 +27,12 @@ public class SoundManager : GenericSingleton<SoundManager>
     [SerializeField]
     private AudioClip playerAttack;
 
+    [SerializeField]
+    private AudioClip defend;
+
+    [SerializeField]
+    private AudioClip touched;
+
     protected override void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
@@ -44,6 +50,28 @@ public class SoundManager : GenericSingleton<SoundManager>
         if (playerSource != null)
         {
             playerSource.clip = playerAttack;
+            playerSource.loop = false;
+            playerSource.Play();
+        }
+    }
+
+
+    public void PlayPlayerBlockSound()
+    {
+        if (playerSource != null)
+        {
+            playerSource.clip = defend;
+            playerSource.loop = false;
+            playerSource.Play();
+        }
+    }
+
+
+    public void PlayPlayerHurtSound()
+    {
+        if (playerSource != null)
+        {
+            playerSource.clip = touched;
             playerSource.loop = false;
             playerSource.Play();
         }

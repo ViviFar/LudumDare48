@@ -18,14 +18,25 @@ public class EnemyBehaviour : MonoBehaviour
 
     [SerializeField]
     private int attack = 10;
-    public int Attack { get { return attack; } }
+    public int Attack
+    {
+        get { return attack; }
+        set { attack = value; }
+    }
     [SerializeField]
     private int blockAmount = 10;
-    public int BlockAmount { get { return blockAmount; } }
+    public int BlockAmount
+    {
+        get { return blockAmount; }
+        set { blockAmount = value; }
+    }
     private int currentBlocks = 0;
 
     private int attackAndBlockAmount = 5;
-    public int AttackAndBlockAmount { get { return attackAndBlockAmount; } }
+    public int AttackAndBlockAmount {
+        get { return attackAndBlockAmount; }
+        set { attackAndBlockAmount = value; }
+    }
 
     private int nextAttack = 1;
     public int NextAttack { get { return nextAttack; } }
@@ -41,13 +52,20 @@ public class EnemyBehaviour : MonoBehaviour
     public void ResetEnemy()
     {
         currentBlocks = 0;
+        indic.UpdateBlocks(currentBlocks);
         nextAttack = 1;
         lives = maxLives;
         indic.updateNExtAttackVisual(nextAttack, attack);
+        indic.UpdateLifeBar(1, maxLives, maxLives);
     }
 
     public void prepareNextAttack()
     {
+        if (StateMachine.Instance.CurrentLevel == 1)
+        {
+            indic.updateNExtAttackVisual(1, 2);
+            return;
+        }
         nextAttack = UnityEngine.Random.Range(1, 4);
         int amountOfNextAttack = nextAttack == 1 ? attack : (nextAttack == 2 ? blockAmount : attackAndBlockAmount);
         indic.updateNExtAttackVisual(nextAttack, amountOfNextAttack);
@@ -80,6 +98,8 @@ public class EnemyBehaviour : MonoBehaviour
             default:
                 break;
         }
+        indic.UpdateBlocks(currentBlocks);
+        yield return new WaitForSeconds(3);
         prepareNextAttack();
         if (StateMachine.Instance.CurrentState == States.EnemyTurn)
             StateMachine.Instance.CurrentState = States.PlayerTurn;
@@ -88,9 +108,17 @@ public class EnemyBehaviour : MonoBehaviour
     public void takeDamage(int damage)
     {
         lives -= Mathf.Max((damage-currentBlocks), 0);
+        if (currentBlocks > 0)
+        {
+            //not really useful, just to update the visual
+            currentBlocks = Mathf.Max((currentBlocks - damage ), 0);
+            indic.UpdateBlocks(currentBlocks);
+        }
+        indic.UpdateLifeBar((float)lives / (float)(maxLives), lives, maxLives);
         if (lives <= 0)
         {
             StateMachine.Instance.CurrentState = States.WinLevel;
+
         }
     }
 
