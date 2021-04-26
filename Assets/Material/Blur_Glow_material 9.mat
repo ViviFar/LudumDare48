@@ -50,7 +50,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - BlurSlider: 1
-    - Blur_slider: 0.21
+    - Blur_slider: 0
     - GlowSlider: 1
     - Glow_slider: 0
     - _AlphaClip: 0

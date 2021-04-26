@@ -46,6 +46,8 @@ public class StateMachine : GenericSingleton<StateMachine>
     private GameObject textFrstLvl;
     [SerializeField]
     private GameObject textScndLvl;
+    [SerializeField]
+    private GameObject textThrdLvl;
 
     [SerializeField]
     private GameObject EnemyPrefab;
@@ -86,7 +88,7 @@ public class StateMachine : GenericSingleton<StateMachine>
     {
         if (currentState != previousState)
         {
-            if(previousState == States.PlayerTurn)
+            if (previousState == States.PlayerTurn)
             {
                 endTurnButton.interactable = false;
                 playedCardsManager.PlayTurn();
@@ -158,6 +160,7 @@ public class StateMachine : GenericSingleton<StateMachine>
         winContinueQuestionContainer.SetActive(false);
         textFrstLvl.SetActive(false);
         textScndLvl.SetActive(false);
+        textThrdLvl.SetActive(false);
     }
 
     private void onStartGameStateEnter()
@@ -171,6 +174,7 @@ public class StateMachine : GenericSingleton<StateMachine>
         winContinueQuestionContainer.SetActive(false);
         textFrstLvl.SetActive(false);
         textScndLvl.SetActive(false);
+        textThrdLvl.SetActive(false);
         currentLevel = 1;
         createFirstLevel();
         createPlayer();
@@ -182,7 +186,7 @@ public class StateMachine : GenericSingleton<StateMachine>
     private void onPlayerTurnStateEnter()
     {
         endTurnButton.interactable = true;
-        if(plyr != null)
+        if (plyr != null)
             plyr.ResetArmor();
     }
 
@@ -206,9 +210,10 @@ public class StateMachine : GenericSingleton<StateMachine>
         winContinueQuestionContainer.SetActive(false);
         textFrstLvl.SetActive(false);
         textScndLvl.SetActive(false);
+        textThrdLvl.SetActive(false);
         StartCoroutine(LoseGame());
     }
-   
+
 
     #endregion
 
@@ -217,6 +222,7 @@ public class StateMachine : GenericSingleton<StateMachine>
         currentState = States.EnemyTurn;
         textFrstLvl.SetActive(false);
         textScndLvl.SetActive(false);
+        textThrdLvl.SetActive(false);
     }
 
     public void Resume()
@@ -232,16 +238,25 @@ public class StateMachine : GenericSingleton<StateMachine>
         {
             textFrstLvl.SetActive(true);
             textScndLvl.SetActive(false);
+            textThrdLvl.SetActive(false);
         }
-        else if(currentLevel == 2)
+        else if (currentLevel == 2)
         {
             textFrstLvl.SetActive(false);
             textScndLvl.SetActive(true);
+            textThrdLvl.SetActive(false);
+        }
+        else if (currentLevel == 3)
+        {
+            textFrstLvl.SetActive(false);
+            textScndLvl.SetActive(false);
+            textThrdLvl.SetActive(true);
         }
         else
         {
             textFrstLvl.SetActive(false);
             textScndLvl.SetActive(false);
+            textThrdLvl.SetActive(false);
         }
     }
 
@@ -259,7 +274,7 @@ public class StateMachine : GenericSingleton<StateMachine>
 
     public int DropCardOnContainer(DragDropCard target)
     {
-        for(int i=0; i< cardContainers.Count; i++)
+        for (int i = 0; i < cardContainers.Count; i++)
         {
             PlayedCardContainer cont = cardContainers[i];
             if (cont.HasCardOver)
@@ -272,7 +287,7 @@ public class StateMachine : GenericSingleton<StateMachine>
         }
         return -1;
     }
-    
+
 
     private void createEnemy()
     {
@@ -319,6 +334,7 @@ public class StateMachine : GenericSingleton<StateMachine>
                     currentEnemy.Attack = 8;
                     currentEnemy.BlockAmount = 20;
                     currentEnemy.AttackAndBlockAmount = 5;
+                    textThrdLvl.SetActive(true);
                     break;
                 case 4:
                     currentEnemy.MaxLives = 346;
@@ -330,10 +346,10 @@ public class StateMachine : GenericSingleton<StateMachine>
                     currentEnemy.MaxLives = 519;
                     currentEnemy.Attack = 20;
                     currentEnemy.BlockAmount = 50;
-                    currentEnemy.AttackAndBlockAmount =10;
+                    currentEnemy.AttackAndBlockAmount = 10;
                     break;
                 default:
-                    currentEnemy.MaxLives +=70;
+                    currentEnemy.MaxLives += 70;
                     currentEnemy.Attack = 20;
                     currentEnemy.BlockAmount = 50;
                     currentEnemy.AttackAndBlockAmount = 10;
@@ -372,13 +388,13 @@ public class StateMachine : GenericSingleton<StateMachine>
         Destroy(currentEnemy.gameObject);
         currentEnemy = null;
     }
-    
+
     private void createFirstLevel()
     {
         createEnemy();
         currentEnemy.MaxLives = 3;
         currentEnemy.Attack = 2;
-        for(int i=1; i<cardContainers.Count; i++)
+        for (int i = 1; i < cardContainers.Count; i++)
         {
             cardContainers[i].gameObject.SetActive(false);
         }
@@ -400,7 +416,7 @@ public class StateMachine : GenericSingleton<StateMachine>
 
     public void deactivateContainers()
     {
-        foreach(PlayedCardContainer ct in cardContainers)
+        foreach (PlayedCardContainer ct in cardContainers)
         {
             if (ct.gameObject.activeInHierarchy)
             {

@@ -1284,6 +1284,7 @@ MonoBehaviour:
   winContinueQuestionContainer: {fileID: 911124643}
   textFrstLvl: {fileID: 2106001014}
   textScndLvl: {fileID: 1334223162}
+  textThrdLvl: {fileID: 1127120390}
   EnemyPrefab: {fileID: 1838063361437411704, guid: 802d7341c0345a149bbbb1956d9a570c,
     type: 3}
   PlayerPrefab: {fileID: 389759044554429633, guid: 1de854bf517e2774ea6605f4eec6421c,
@@ -1340,7 +1341,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.11283268, y: 0.23170157}
   m_AnchorMax: {x: 0.32166538, y: 0.29629847}
-  m_AnchoredPosition: {x: 2.2756348, y: -0.2687378}
+  m_AnchoredPosition: {x: 2.2756348, y: -0.26867676}
   m_SizeDelta: {x: 4.046631, y: 4.238037}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &529374628
@@ -2875,7 +2876,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.565, y: 0.23843096}
   m_AnchorMax: {x: 1, y: 0.6183013}
-  m_AnchoredPosition: {x: -14, y: -12.1}
+  m_AnchoredPosition: {x: -14, y: -12.099976}
   m_SizeDelta: {x: 27.000793, y: 22.111633}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &787349478
@@ -3457,6 +3458,7 @@ RectTransform:
   - {fileID: 911124644}
   - {fileID: 2106001015}
   - {fileID: 1334223163}
+  - {fileID: 1127120391}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4151,6 +4153,86 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1122313764}
   m_CullTransparentMesh: 0
+--- !u!1 &1127120390
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1127120391}
+  - component: {fileID: 1127120393}
+  - component: {fileID: 1127120392}
+  m_Layer: 5
+  m_Name: Level3Text
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &1127120391
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1127120390}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 910964187}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.46731547, y: 0.8417778}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -2.5999756, y: -6.5}
+  m_SizeDelta: {x: 3.6591797, y: 12.92984}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1127120392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1127120390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 063af30acedf9d3479359de9a7f4db56, type: 3}
+    m_FontSize: 105
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 1
+    m_MaxSize: 105
+    m_Alignment: 1
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 0.5
+  m_Text: Oh no! When the onion hurts you it makes you cry, which blurs your vision
+    :(
+--- !u!222 &1127120393
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1127120390}
+  m_CullTransparentMesh: 0
 --- !u!1 &1128726690
 GameObject:
   m_ObjectHideFlags: 0
@@ -4830,8 +4912,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.46731547, y: 0.8417778}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -2.5999756, y: -54.700012}
-  m_SizeDelta: {x: 3.6591797, y: 109.52814}
+  m_AnchoredPosition: {x: -2.5999756, y: -1.0837097}
+  m_SizeDelta: {x: 3.6591797, y: 2.2956543}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1334223164
 MonoBehaviour:
@@ -4865,9 +4947,9 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: modifiers strengthen the card pointed by the arrow. Use them to create
-    powerful combos
+    m_LineSpacing: 0.5
+  m_Text: Modifiers strengthen the card pointed by the arrow. Use them to create
+    powerful combos!
 --- !u!222 &1334223165
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8216,7 +8298,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.5041504, y: 0.9970093}
+  m_AnchoredPosition: {x: 0.5041504, y: 0.9970703}
   m_SizeDelta: {x: -2.2980957, y: 1.6303711}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2032729186
@@ -8374,13 +8456,13 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 1
     m_MaxSize: 105
-    m_Alignment: 0
+    m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: Drag a card and drop it into the empty card position
+    m_LineSpacing: 0.5
+  m_Text: Drag a card and drop it into the empty card position.
 --- !u!222 &2106001017
 CanvasRenderer:
   m_ObjectHideFlags: 0
