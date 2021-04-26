@@ -132,11 +132,11 @@ public class StateMachine : GenericSingleton<StateMachine>
 #if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.L) && plyr != null)
         {
-            plyr.TakeDamage(10000000);
+            plyr.TakeDamage(10);
         }
         if (Input.GetKeyDown(KeyCode.W) && plyr != null)
         {
-            currentEnemy.takeDamage(100000000);
+            currentEnemy.takeDamage(10);
         }
 #endif
     }
@@ -161,6 +161,7 @@ public class StateMachine : GenericSingleton<StateMachine>
         createEnemy();
         createPlayer();
         currentState = States.PlayerTurn;
+        BlurManager.Instance.Blur();
     }
 
     private void onPlayerTurnStateEnter()
@@ -250,6 +251,7 @@ public class StateMachine : GenericSingleton<StateMachine>
         GameObject go = Instantiate(PlayerPrefab, GameContainer.transform);
         plyr = go.GetComponent<Player>();
         SoundManager.Instance.PlayerSource = plyr.GetComponent<AudioSource>();
+        plyr.ResetPlayer();
     }
 
     private IEnumerator WinLevel()

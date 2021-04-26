@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     public int MaxLife { get { return maxLife; } }
     [SerializeField]
     private int currentLife;
+    public int CurrentLife { get { return currentLife; } }
 
     private int armor = 0;
 
@@ -26,7 +27,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void ResetPlayer()
@@ -37,13 +38,17 @@ public class Player : MonoBehaviour
     public void ResetArmor() { armor = 0; }
     public void TakeDamage(int dam)
     {
-        currentLife -= Mathf.Max((dam-armor), 0);
+        currentLife -= Mathf.Max((dam - armor), 0);
         if (currentLife <= 0)
         {
             StateMachine.Instance.CurrentState = States.Lose;
             SoundManager.Instance.PlayerSource = null;
             StateMachine.Instance.DestroyPlayer();
             Destroy(this.gameObject);
+        }
+        else
+        {
+            BlurManager.Instance.Blur();
         }
     }
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DragDropCard : MonoBehaviour
 {
@@ -78,4 +79,9 @@ public class DragDropCard : MonoBehaviour
         transform.position = targetPos;
     }
 
+    public void GlowCard(float glow)
+    {
+        var image = GetComponent<Image>();
+        image.material.SetFloat("Glow_slider", glow);
+    }
 }
