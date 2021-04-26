@@ -134,7 +134,8 @@ public class ApplyPlayedCardsEffect : MonoBehaviour
                         break;
                     case CardEffect.Block:
                         Debug.Log("blocking for " + multiply[i] * cb.EffectStrength + " damage");
-                        StateMachine.Instance.Plyr.AddArmor(multiply[i] * cb.EffectStrength);
+                        if(StateMachine.Instance.Plyr!=null)
+                            StateMachine.Instance.Plyr.AddArmor(multiply[i] * cb.EffectStrength);
                         break;
                     case CardEffect.Damage:
                         Debug.Log("attacking for " + multiply[i] * cb.EffectStrength + " damage");
